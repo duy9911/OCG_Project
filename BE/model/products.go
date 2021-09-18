@@ -17,7 +17,7 @@ type Product struct {
 }
 type ProductVariance struct {
 	gorm.Model
-	ProductID   uint   `json: "product_id `
+	ProductID   uint   `json: "product_id"`
 	Color       string `json: "color"`
 	Size        string `json: "size"`
 	OrderDetail OrderDetail
