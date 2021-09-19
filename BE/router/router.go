@@ -17,9 +17,10 @@ func HandleRequests() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", index)
 	r.HandleFunc("/api/products", controller.GetProducts)
+	r.HandleFunc("/api/products/{id:[0-9]+}", controller.GetOneProduct)
 
-	r.HandleFunc("/api/home/pages/collections", controller.GetAllPages)
-	r.HandleFunc("/api/home/page/{id:[0-9]+}/collections", controller.GetOnePage)
+	r.HandleFunc("/api/pages/collections", controller.GetAllPages)
+	r.HandleFunc("/api/pages/{id:[0-9]+}/collections", controller.GetOnePage)
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":9911", r))
 }

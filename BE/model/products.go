@@ -2,6 +2,7 @@ package model
 
 import (
 	"backend/config"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -41,7 +42,10 @@ func AllProducts() ([]Product, error) {
 
 var product Product
 
-func OneProduct() (Product, error) {
+func OneProduct(id string) (Product, error) {
+	if err := config.Database.Where("id = ? ", id).First(&product).Error; err != nil {
+		fmt.Println(err.Error())
+	}
 	err := config.Database.Preload("Images").Preload("ProductVariances").Find(&product).Error
 	return product, err
 }
