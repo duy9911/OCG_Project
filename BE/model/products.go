@@ -1,8 +1,7 @@
 package model
 
 import (
-	"backend/dbconfig"
-	"fmt"
+	"backend/config"
 
 	"gorm.io/gorm"
 )
@@ -21,7 +20,7 @@ type ProductVariance struct {
 	Size        string `json:"size"`
 	Color       string `json:"color"`
 	Price       string `json:"price"`
-	Iventory    string `json:"inventory"`
+	Inventory   int    `json:"inventory"`
 	OrderDetail OrderDetail
 }
 
@@ -34,18 +33,15 @@ type CreateProduct struct {
 	Image       string `json:"image"`
 }
 
-var product []CreateProduct
-
-func AllProduct() ([]CreateProduct, error) {
-	rows, err := dbconfig.Database.Debug().Table("products").Select(" products.id, products.name, products.description, product_variances.color, product_variances.size, images.image").Joins("inner join  product_variances on products.id=product_variances.product_id inner join images on products.id = images.product_id").Rows()
-	fmt.Println(rows)
-	defer rows.Close()
-	for rows.Next() {
-		dbconfig.Database.ScanRows(rows, &product)
-	}
-	return product, err
+func AllProducts() ([]Product, error) {
+	products := make([]Product, 0)
+	err := config.Database.Preload("Images").Preload("ProductVariances").Find(&products).Error
+	return products, err
 }
 
-func AllProducts() ([]Product, error) {
+var product Product
 
+func OneProduct() (Product, error) {
+	err := config.Database.Preload("Images").Preload("ProductVariances").Find(&product).Error
+	return product, err
 }

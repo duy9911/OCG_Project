@@ -14,7 +14,7 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pdt, err := model.AllProduct()
+	pdt, err := model.AllProducts()
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

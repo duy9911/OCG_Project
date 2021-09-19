@@ -1,13 +1,13 @@
 package model
 
 import (
-	"backend/dbconfig"
+	"backend/config"
 	"fmt"
 )
 
 func Create() {
-	// dbconfig.Database.Migrator().DropTable(&Order{}, &User{}, &Image{}, &Product{}, &ProductVariance{}, &OrderDetail{}, &User{}, &Page{}, &Collection{}, &Category{}, &CategoryProduct{})
-	if err := dbconfig.Database.Migrator().AutoMigrate(&Order{},
+	// config.Database.Migrator().DropTable(&Order{}, &User{}, &Image{}, &Product{}, &ProductVariance{}, &OrderDetail{}, &User{}, &Page{}, &Collection{}, &Category{}, &CategoryProduct{})
+	if err := config.Database.Migrator().AutoMigrate(&Order{},
 		&Product{}, &Image{}, &ProductVariance{},
 		&OrderDetail{}, &User{}, &Page{}, &Collection{},
 		&Category{}, &CategoryProduct{}); err != nil {

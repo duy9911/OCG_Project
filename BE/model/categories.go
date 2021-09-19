@@ -1,7 +1,7 @@
 package model
 
 import (
-	"backend/dbconfig"
+	"backend/config"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -40,10 +40,10 @@ type Page struct {
 // so enjoy
 func OnePageCollections(id string) (Page, error) {
 	rt := Page{}
-	if err := dbconfig.Database.Where("id = ? ", id).First(&rt).Error; err != nil {
+	if err := config.Database.Where("id = ? ", id).First(&rt).Error; err != nil {
 		fmt.Printf(err.Error())
 	}
-	dbconfig.Database.Model(&rt).Association("Collections").Find(&rt.Collections)
+	config.Database.Model(&rt).Association("Collections").Find(&rt.Collections)
 	return rt, nil
 }
 
@@ -51,7 +51,7 @@ var pages []Page
 
 //Preload collection first and then match with pages
 func AllPageCollections() ([]Page, error) {
-	err := dbconfig.Database.Preload("Collections").Find(&pages).Error // SELECT * FROM pages;
-	return pages, err                                                  // SELECT * FROM colelctions WHERE colelctions.pages_id IN (1,2,3,4);
+	err := config.Database.Preload("Collections").Find(&pages).Error // SELECT * FROM pages;
+	return pages, err                                                // SELECT * FROM colelctions WHERE colelctions.pages_id IN (1,2,3,4);
 
 }

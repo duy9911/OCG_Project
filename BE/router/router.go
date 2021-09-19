@@ -16,7 +16,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 func HandleRequests() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", index)
-	r.HandleFunc("/api/producst", controller.GetProducts)
+	r.HandleFunc("/api/products", controller.GetProducts)
 
 	r.HandleFunc("/api/home/pages/collections", controller.GetAllPages)
 	r.HandleFunc("/api/home/page/{id:[0-9]+}/collections", controller.GetOnePage)
