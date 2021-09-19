@@ -18,8 +18,8 @@ func HandleRequests() {
 	r.HandleFunc("/", index)
 	r.HandleFunc("/api/producst", controller.GetProducts)
 
-	r.HandleFunc("/api/pages/collections", controller.GetAllPages)
-	r.HandleFunc("/api/pages/{id:[0-9]+}/collections", controller.GetOnePage)
+	r.HandleFunc("/api/home/pages/collections", controller.GetAllPages)
+	r.HandleFunc("/api/home/page/{id:[0-9]+}/collections", controller.GetOnePage)
 	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":9922", r))
+	log.Fatal(http.ListenAndServe(":9911", r))
 }
