@@ -1,7 +1,8 @@
 package model
 
 import (
-	"backend/dbconfig"
+	"backend/config"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -15,8 +16,8 @@ type Category struct {
 
 type CategoryProduct struct {
 	gorm.Model
-	ProductID  uint `json: "product_id `
-	CategoryID uint `json: "category_id"`
+	ProductID  uint `json:"product_id"`
+	CategoryID uint `json:"category_id"`
 }
 
 type Collection struct {
@@ -29,41 +30,28 @@ type Collection struct {
 
 type Page struct {
 	gorm.Model
-	PageName   string       `json:"page_name"`
-	Collection []Collection `gorm:"foreignKey:PageID"`
+	PageName    string       `json:"page_name"`
+	Collections []Collection `gorm:"foreignKey:PageID"`
 }
 
-type CreatePage struct {
-	ID             uint   `json:"id"`
-	PageName       string `json:"page_name"`
-	CollectionName string `json:"collection_name"`
-}
-
-var createPages []CreatePage
-
-//tao mot struct de output api home page/collection
-// type output struct{
-// ID uint
-// PageName
-// Collections  []Collection
-// }
-// lap qua trung rows dien 2 variable id va name sau do tao 1 slice va dien collection_id va collection_name
-// trong moi moi rows loop qua page_id is exist,
-func AllPage() ([]CreatePage, error) {
-	rows, err := dbconfig.Database.Debug().Table("pages").Select("pages.id, pages.page_name, collections.collection_name").Joins("inner join collections on pages.id = collections.page_id").Rows()
-	defer rows.Close()
-	for rows.Next() {
-		dbconfig.Database.ScanRows(rows, &createPages)
+// First i create new list as createPage which use to recieve each row from sql  querey returnPagespond
+// then i create another struct. i named it OutPut to return value, because one product can be has many properties
+// such as size and color
+// so enjoy
+func OnePageCollections(id string) (Page, error) {
+	rt := Page{}
+	if err := config.Database.Where("id = ? ", id).First(&rt).Error; err != nil {
+		fmt.Printf(err.Error())
 	}
-	return createPages, err
+	config.Database.Model(&rt).Association("Collections").Find(&rt.Collections)
+	return rt, nil
 }
 
-func OnePage(id string) (CreatePage, error) {
-	createPage := CreatePage{}
-	rows, err := dbconfig.Database.Table("pages").Select("pages.id, pages.page_name, collections.collection_name").Joins("inner join collections on pages.id=collections.page_id").Where("pages.id=?", id).Find(&createPage).Rows()
-	defer rows.Close()
-	for rows.Next() {
-		dbconfig.Database.ScanRows(rows, &createPage)
-	}
-	return createPage, err
+var pages []Page
+
+//Preload collection first and then match with pages
+func AllPageCollections() ([]Page, error) {
+	err := config.Database.Preload("Collections").Find(&pages).Error // SELECT * FROM pages;
+	return pages, err                                                // SELECT * FROM colelctions WHERE colelctions.pages_id IN (1,2,3,4);
+
 }
