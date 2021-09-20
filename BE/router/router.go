@@ -21,6 +21,10 @@ func HandleRequests() {
 
 	r.HandleFunc("/api/pages/collections", controller.GetAllPages)
 	r.HandleFunc("/api/pages/{id:[0-9]+}/collections", controller.GetOnePage)
+
+	r.HandleFunc("/api/collections/{id:[0-9]+}/categories", controller.GetOneCollection)
+	r.HandleFunc("/api/collections/{id:[0-9]+}/categories/product", controller.GetOneCollection)
+
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":9911", r))
 }

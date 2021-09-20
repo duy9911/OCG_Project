@@ -19,7 +19,6 @@ func GetOnePage(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	id := vars["id"]
-	fmt.Println(id)
 	page, err := model.OnePageCollections(id)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

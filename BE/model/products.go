@@ -13,7 +13,6 @@ type Product struct {
 	Description      string            `json:"description"`
 	ProductVariances []ProductVariance `gorm:"foreignKey:ProductID"`
 	Images           []Image           `gorm:"foreignKey:ProductID"`
-	CategoryProducts []CategoryProduct `gorm:"foreignKey:ProductID"`
 }
 type ProductVariance struct {
 	gorm.Model
